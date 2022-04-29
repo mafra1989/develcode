@@ -2,7 +2,6 @@ package com.develcode.rodrigo.model;
 
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.Objects;
 
 import javax.persistence.Column;
@@ -10,9 +9,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Lob;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
-import org.springframework.format.annotation.DateTimeFormat;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 
 @Entity
@@ -20,44 +20,57 @@ public class Usuario {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-	@Column
-	private String nome;
-	@DateTimeFormat(pattern = "dd/MM/yyyy")
-	private String dataNascimento;
-	@Lob
-	private String foto;
+	private Long codigo;
 	
-	public Long getId() {
-		return id;
+	@NotNull
+	@Size(max = 50)
+	private String nome;
+	
+	@NotNull
+	@Column(name = "data_nascimento")
+	@JsonFormat(pattern =  "dd/MM/yyyy")
+	private LocalDate dataNascimento;
+
+	@Column
+	private String foto;
+
+	public Long getCodigo() {
+		return codigo;
 	}
-	public void setId(Long id) {
-		this.id = id;
+
+	public void setCodigo(Long codigo) {
+		this.codigo = codigo;
 	}
+
 	public String getNome() {
 		return nome;
 	}
+
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-	public String getDataNascimento() {
+
+	public LocalDate getDataNascimento() {
 		return dataNascimento;
 	}
-	public void setDataNascimento(String dataNascimento) {
+
+	public void setDataNascimento(LocalDate dataNascimento) {
 		this.dataNascimento = dataNascimento;
 	}
-	
+
 	public String getFoto() {
 		return foto;
 	}
+
 	public void setFoto(String foto) {
 		this.foto = foto;
 	}
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(dataNascimento, foto, id, nome);
+		return Objects.hash(codigo);
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -67,7 +80,7 @@ public class Usuario {
 		if (getClass() != obj.getClass())
 			return false;
 		Usuario other = (Usuario) obj;
-		return Objects.equals(dataNascimento, other.dataNascimento) && foto == other.foto
-				&& Objects.equals(id, other.id) && Objects.equals(nome, other.nome);
-	}	
+		return Objects.equals(codigo, other.codigo);
+	}
+
 }
